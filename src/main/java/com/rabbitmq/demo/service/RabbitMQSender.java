@@ -47,5 +47,8 @@ public class RabbitMQSender {
         rabbitTemplate.convertAndSend(topicExchange, TOPIC_ROUTING_KEY_ERROR ,employee);
         System.out.println("Send msg = " + employee);
     }
+    public void sendToDeadLetterQueue(Employee employee) {
+        rabbitTemplate.convertAndSend("javainuse-direct-exchange", "javainuse", employee);
+    }
 
 }

@@ -6,6 +6,7 @@ import org.springframework.amqp.core.Declarables;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
@@ -67,6 +68,28 @@ public class RabbitMQConfig {
           fanoutExchange,
           BindingBuilder.bind(fanoutQueue1).to(fanoutExchange),
           BindingBuilder.bind(fanoutQueue2).to(fanoutExchange));
+    }
+    @Bean
+    DirectExchange deadLetterExchange() {
+        return new DirectExchange("deadLetterExchange");
+    }
+    @Bean
+    Queue deadLetterQueue() {
+        return QueueBuilder.durable("deadLetterQueue").build();
+    }
+    @Bean
+    DirectExchange exchangeDirect() {
+        return new DirectExchange("javainuse-direct-exchange");
+    }
+    @Bean
+    Queue queue2() {
+        return QueueBuilder.durable("javainuse.queue").withArgument("x-dead-letter-exchange", "deadLetterExchange")
+          .withArgument("x-dead-letter-routing-key", "deadLetter").build();
+    }
+
+    @Bean
+    Binding bindingDeadLetter() {
+        return BindingBuilder.bind(queue2()).to(exchangeDirect()).with("javainuse");
     }
 
     @Bean

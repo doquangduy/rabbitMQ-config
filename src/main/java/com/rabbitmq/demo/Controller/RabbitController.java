@@ -24,4 +24,13 @@ public class RabbitController {
         rabbitMQSender.sendToTopicExchangeWarn(employee);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
+
+    @GetMapping("/dlq")
+    public ResponseEntity<?> sendMsgDLQ() {
+        Employee employee = new Employee();
+        employee.setEmpId("1");
+        employee.setEmpName("duy");
+        rabbitMQSender.sendToDeadLetterQueue(employee);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
 }

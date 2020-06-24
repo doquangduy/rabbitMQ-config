@@ -26,4 +26,9 @@ public class RabbitConsumer {
     public void receiveMessageFromTopic2(Employee message) {
         System.out.println("Received topic 2 ERROR message: " + message);
     }
+    @RabbitListener(queues = "javainuse.queue")
+    public void receiveMessageDLQ(String message) throws Exception {
+//        throw new Exception("e");
+        System.out.println("Received topic 2 ERROR message: " + message);
+    }
 }
